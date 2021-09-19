@@ -362,7 +362,7 @@ public class Helper
     }
   }
 
-  public static File getVisiCutFolder()
+  public static File getVisiCutFolder() throws FileNotFoundException
   {
     try
     {
@@ -373,7 +373,24 @@ public class Helper
       }
       String decodedPath = URLDecoder.decode(path, "UTF-8");
       File folder = new File(decodedPath);
-      return folder.isDirectory() ? folder : folder.getParentFile();
+
+      if (!folder.isDirectory()) {
+        folder = folder.getParentFile();
+      }
+
+      // detect the path in which the example folder exists, because folder structure on MacOS is different
+      File example = new File(folder, "example");
+      if (example.exists())
+      {
+        return folder;
+      } else {
+        File macosexample = new File(folder, "../Resources/Java/example");
+        if (macosexample.exists()) {
+          return macosexample.getParentFile();
+        } else {
+          throw new FileNotFoundException("Folder 'example' not found in visicut directory. Please report this bug.");
+        }
+      }
     }
     catch (UnsupportedEncodingException ex)
     {
