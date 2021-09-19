@@ -378,7 +378,7 @@ public class Helper
         folder = folder.getParentFile();
       }
 
-      // detect the path in which the example folder exists, because folder structure on MacOS is different
+      // detect the path in which the example folder exists, because folder structure on MacOS is different from other OS
       File example = new File(folder, "example");
       if (example.exists())
       {
